@@ -28,9 +28,9 @@ workflows:
       - name: Patch Podfile - set iOS 12
         script: |
           cd ios/App
-          sed -i '' "s/platform :ios, '[0-9.]*/platform :ios, '12.0'/" Podfile
-          grep -q "platform :ios" Podfile || sed -1 '' '1s/^/platform :ios,'\''12.0'\''\n/' Podfile
-          head -10 Podfile
+          sed -i '' "s/platform :ios, '[0-9.]*'/platform :ios, '12.0'/g" Podfile
+          echo "=== Hasil Patch Podfile ==="
+          head -n 15 Podfile
           
       - name: Set iOS 12 all xcconfig - set iOS 12
         script: |
