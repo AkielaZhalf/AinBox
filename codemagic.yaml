@@ -10,7 +10,7 @@ workflows:
         - pattern: main
     environment:
       node: 20 # Sama dengan setup-node@v4 node-version: 20
-      xcode: 15.2 # Sama dengan setup-xcode xcode-version: 15.2
+      xcode: 15.4 # Sama dengan setup-xcode xcode-version: 15.2
     scripts:
       - name: Install dependencies
         script: |
