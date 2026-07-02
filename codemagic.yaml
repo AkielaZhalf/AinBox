@@ -40,7 +40,8 @@ workflows:
           pod install --repo-update
           
       # 1. Kita kembalikan izin compile dasar Xcode agar membuat struktur penampung tanda tangan
-      - name: Build App (iOS 12, ready for Ad-Hoc signing)
+      # 1. Biarkan Xcode 16 build total tanpa menyentuh fitur Code Sign (Lolos dari blokir SDK 18)
+      - name: Build App (iOS 12, unsigned)
         script: |
           cd ios/App
           xcodebuild \
@@ -50,34 +51,51 @@ workflows:
             -destination 'generic/platform=iOS' \
             -sdk iphoneos \
             -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGN_IDENTITY="" \
             ARCHS="arm64" \
             ONLY_ACTIVE_ARCH=YES \
             IPHONEOS_DEPLOYMENT_TARGET=12.0 \
             EXCLUDED_ARCHS="armv7 armv7s" \
             build
 
-      # 2. Langkah krusial: Memaksa macOS memberikan identitas Ad-Hoc pada biner aplikasi
-      - name: Package and Ad-Hoc Sign .ipa
+      # 2. Inject Entitlements & Paksa Ad-Hoc Sign lewat tool macOS (Filza/AppSync bypass)
+      - name: Package and Force Sign .ipa
         script: |
           cd ios/App
           APP_PATH=$(find build -name "*.app" | head -1)
           echo "Menemukan aplikasi di: $APP_PATH"
           
-          # Lakukan tanda tangan Ad-Hoc secara paksa menggunakan signature "-"
-          echo "=== Memulai Proses Ad-Hoc Signing ==="
-          codesign --force --deep --sign "-" "$APP_PATH"
+          # Membuat file entitlements dummy agar iOS 12 mengenali application-identifier
+          cat << 'EOF' > entitlements.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>application-identifier</key>
+              <string>com.ainbox.app</string>
+              <key>get-task-allow</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
           
-          # Verifikasi apakah tanda tangan buatan berhasil terpasang
+          echo "=== Melakukan Ad-Hoc Signing Manual ==="
+          # Tanda tangani framework internal Capacitor terlebih dahulu
+          find "$APP_PATH" -name "*.framework" -exec codesign --force --sign "-" --entitlements entitlements.plist {} \; || true
+          
+          # Tanda tangani biner aplikasi utama
+          codesign --force --sign "-" --entitlements entitlements.plist "$APP_PATH"
+          
+          # Verifikasi hasil tanda tangan
           codesign -dvvv "$APP_PATH"
           
-          # Bungkus menjadi file .ipa siap pakai
+          # Bungkus ke format .ipa
           mkdir -p Payload
           cp -r "$APP_PATH" Payload/
           zip -r AiNbox.ipa Payload
-          echo "✅ IPA iOS 12 dengan Tanda Tangan Ad-Hoc SIAP!"
+          echo "✅ IPA iOS 12 Signed Berhasil Dibuat!"
           ls -lh AiNbox.ipa
           
     artifacts:
