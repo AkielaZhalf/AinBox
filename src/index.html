@@ -1,727 +1,1768 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="AiNbox">
-<title>AiNbox</title>
-<style>
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-touch-callout:none; }
-:root {
-  --navy:#0d1b8e; --navy-dark:#081060; --navy-light:#1a2fb0;
-  --white:#ffffff; --gray-bg:#f0f0f5; --gray-card:#e8e8f0;
-  --gray-muted:#a0a0b8; --gray-text:#555570; --black:#111122;
-  --radius-xl:28px; --radius-pill:50px;
-  --shadow:0 4px 24px rgba(13,27,142,0.10);
-  --shadow-btn:0 6px 20px rgba(13,27,142,0.30);
-  --safe-top: env(safe-area-inset-top, 20px);
-  --safe-bot: env(safe-area-inset-bottom, 0px);
-}
-html, body { height:100%; overflow:hidden; background:#fff; }
-body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif; }
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="AiNbox">
+  <title>AiNbox</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
 
-/* ── PAGE SYSTEM ── */
-.page { display:none; width:100%; height:100vh; flex-direction:column; overflow:hidden; background:#fff; position:absolute; top:0; left:0; right:0; bottom:0; }
-.page.active { display:flex; }
+    :root {
+      --navy: #0d1b8e;
+      --navy-dark: #081060;
+      --navy-light: #1a2fb0;
+      --white: #ffffff;
+      --gray-bg: #f0f0f5;
+      --gray-card: #e8e8f0;
+      --gray-muted: #a0a0b8;
+      --gray-text: #555570;
+      --black: #111122;
+      --radius-xl: 28px;
+      --radius-pill: 50px;
+      --shadow: 0 4px 24px rgba(13, 27, 142, 0.10);
+      --shadow-btn: 0 6px 20px rgba(13, 27, 142, 0.30);
+      --safe-top: env(safe-area-inset-top, 20px);
+      --safe-bot: env(safe-area-inset-bottom, 0px);
+    }
 
-/* ── HEADER ── */
-.header { padding:calc(var(--safe-top) + 10px) 20px 12px; display:flex; align-items:center; justify-content:space-between; background:white; border-radius:0 0 24px 24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); flex-shrink:0; }
-.header-logo { display:flex; align-items:center; gap:8px; }
-.header-logo span { font-size:20px; font-weight:800; color:var(--black); letter-spacing:-0.5px; }
-.header-tag { font-size:13px; color:var(--gray-muted); font-weight:500; }
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      background: #fff;
+    }
 
-/* ── SCROLL CONTENT ── */
-.scroll-content { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 16px 110px; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    }
 
-/* ── BUTTONS ── */
-.btn-pill { width:100%; padding:16px 24px; background:var(--navy); color:white; border:none; border-radius:var(--radius-pill); font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:var(--shadow-btn); font-family:inherit; }
-.btn-pill:active { opacity:0.85; }
+    /* ── PAGE SYSTEM ── */
+    .page {
+      display: none;
+      width: 100%;
+      height: 100vh;
+      flex-direction: column;
+      overflow: hidden;
+      background: #fff;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
 
-/* ── INPUTS ── */
-.input-field { width:100%; background:white; border:none; border-radius:var(--radius-pill); padding:14px 20px; font-size:15px; color:var(--black); outline:none; font-family:inherit; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
-.input-field::placeholder { color:var(--gray-muted); }
+    .page.active {
+      display: flex;
+    }
 
-/* ── TAB BAR ── */
-.tab-bar { position:absolute; bottom:calc(var(--safe-bot) + 16px); left:50%; transform:translateX(-50%); display:flex; gap:4px; padding:6px; background:white; border-radius:var(--radius-pill); box-shadow:0 4px 20px rgba(0,0,0,0.12); z-index:100; white-space:nowrap; }
-.tab-btn { padding:10px 16px; border-radius:var(--radius-pill); border:none; background:transparent; color:var(--gray-muted); font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px; font-family:inherit; }
-.tab-btn svg { width:16px; height:16px; }
-.tab-btn.active { background:var(--navy); color:white; }
+    /* ── HEADER ── */
+    .header {
+      padding: calc(var(--safe-top) + 10px) 20px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      border-radius: 0 0 24px 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      flex-shrink: 0;
+    }
 
-/* ── FORM CARD ── */
-.form-card { background:var(--gray-bg); border-radius:var(--radius-xl); padding:24px 20px; display:flex; flex-direction:column; gap:14px; margin-bottom:20px; }
-.form-label { font-size:12px; color:var(--gray-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
-.hint { font-size:12px; color:var(--gray-muted); text-align:center; }
-.hint a { color:var(--navy); text-decoration:none; font-weight:600; }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-/* ── HOME ── */
-.greeting { font-size:26px; font-weight:900; color:var(--black); letter-spacing:-0.5px; margin-bottom:4px; }
-.greeting-sub { font-size:14px; color:var(--gray-muted); margin-bottom:20px; }
-.feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
-.feature-card { background:var(--gray-bg); border-radius:20px; padding:18px 16px; cursor:pointer; }
-.feature-card:active { transform:scale(0.97); }
-.feature-card.wide { grid-column:span 2; display:flex; align-items:center; gap:16px; background:var(--navy); color:white; }
-.feature-icon { width:40px; height:40px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:10px; }
-.feature-card.wide .feature-icon { margin-bottom:0; background:rgba(255,255,255,0.15); }
-.feature-name { font-size:14px; font-weight:700; color:var(--black); }
-.feature-desc { font-size:12px; color:var(--gray-muted); margin-top:2px; }
-.feature-card.wide .feature-name { color:white; font-size:16px; }
-.feature-card.wide .feature-desc { color:rgba(255,255,255,0.7); }
-.section-title { font-size:16px; font-weight:800; color:var(--black); margin-bottom:12px; }
-.recent-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--gray-bg); cursor:pointer; }
-.recent-icon { width:40px; height:40px; background:var(--gray-bg); border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.recent-title { font-size:14px; font-weight:600; color:var(--black); }
-.recent-time { font-size:12px; color:var(--gray-muted); }
+    .header-logo span {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--black);
+      letter-spacing: -0.5px;
+    }
 
-/* ── CHAT ── */
-.chat-header { padding:calc(var(--safe-top) + 8px) 20px 12px; display:flex; align-items:center; gap:12px; background:white; border-radius:0 0 20px 20px; box-shadow:0 2px 12px rgba(0,0,0,0.06); flex-shrink:0; }
-.chat-avatar { width:40px; height:40px; background:var(--navy); border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.chat-name { font-size:16px; font-weight:800; color:var(--black); }
-.chat-status { font-size:12px; color:#22c55e; font-weight:500; }
-.chat-messages { flex:1; padding:16px; overflow-y:auto; -webkit-overflow-scrolling:touch; display:flex; flex-direction:column; gap:12px; padding-bottom:80px; }
-.msg { display:flex; gap:8px; max-width:85%; }
-.msg.user { align-self:flex-end; flex-direction:row-reverse; }
-.msg-avatar { width:28px; height:28px; border-radius:10px; flex-shrink:0; background:var(--navy); display:flex; align-items:center; justify-content:center; }
-.msg.user .msg-avatar { background:var(--gray-bg); }
-.bubble { background:var(--gray-bg); border-radius:18px 18px 18px 4px; padding:12px 16px; font-size:14px; color:var(--black); line-height:1.5; }
-.msg.user .bubble { background:var(--navy); color:white; border-radius:18px 18px 4px 18px; }
-.msg-time { font-size:10px; color:var(--gray-muted); margin-top:4px; }
-.chat-input-bar { position:absolute; bottom:0; left:0; right:0; padding:12px 16px calc(var(--safe-bot) + 12px); background:white; border-top:1px solid var(--gray-bg); display:flex; gap:10px; align-items:center; }
-.chat-input { flex:1; background:var(--gray-bg); border:none; border-radius:var(--radius-pill); padding:12px 18px; font-size:14px; outline:none; font-family:inherit; color:var(--black); }
-.chat-input::placeholder { color:var(--gray-muted); }
-.send-btn { width:44px; height:44px; background:var(--navy); border:none; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
-.attach-btn { width:44px; height:44px; background:var(--gray-bg); border:none; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
-.typing { display:flex; gap:4px; padding:12px 16px; background:var(--gray-bg); border-radius:18px 18px 18px 4px; width:fit-content; }
-.typing span { width:8px; height:8px; background:var(--gray-muted); border-radius:50%; animation:typing 1s infinite; }
-.typing span:nth-child(2) { animation-delay:.2s; }
-.typing span:nth-child(3) { animation-delay:.4s; }
-@keyframes typing { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+    .header-tag {
+      font-size: 13px;
+      color: var(--gray-muted);
+      font-weight: 500;
+    }
 
-/* ── SEARCH ── */
-.page-title { font-size:28px; font-weight:900; color:var(--black); letter-spacing:-0.5px; margin-bottom:16px; }
-.search-bar { display:flex; gap:10px; margin-bottom:16px; }
-.search-input { flex:1; background:var(--gray-bg); border:none; border-radius:var(--radius-pill); padding:14px 20px; font-size:14px; outline:none; font-family:inherit; color:var(--black); }
-.search-input::placeholder { color:var(--gray-muted); }
-.search-go { width:48px; height:48px; background:var(--navy); border:none; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
-.result-card { background:var(--gray-bg); border-radius:18px; padding:16px; margin-bottom:12px; cursor:pointer; }
-.result-source { font-size:11px; color:var(--navy); font-weight:600; margin-bottom:4px; }
-.result-title { font-size:14px; font-weight:700; color:var(--black); margin-bottom:4px; }
-.result-snippet { font-size:13px; color:var(--gray-text); line-height:1.5; }
-.chips { display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto; margin-bottom:16px; padding-bottom:4px; }
-.chip { padding:8px 14px; background:var(--gray-bg); border-radius:var(--radius-pill); font-size:13px; color:var(--gray-text); font-weight:500; cursor:pointer; border:none; font-family:inherit; white-space:nowrap; }
-.chip.active { background:var(--navy); color:white; }
+    /* ── SCROLL CONTENT ── */
+    .scroll-content {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 16px 110px;
+    }
 
-/* ── DOCUMENTS ── */
-.upload-zone { background:var(--gray-bg); border-radius:var(--radius-xl); padding:32px 20px; display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:20px; border:2px dashed var(--gray-card); cursor:pointer; text-align:center; }
-.upload-icon { width:60px; height:60px; background:white; border-radius:18px; display:flex; align-items:center; justify-content:center; margin-bottom:4px; box-shadow:0 2px 10px rgba(0,0,0,0.06); }
-.upload-title { font-size:16px; font-weight:700; color:var(--black); }
-.upload-sub { font-size:13px; color:var(--gray-muted); }
-.doc-item { display:flex; align-items:center; gap:12px; padding:14px; background:var(--gray-bg); border-radius:16px; margin-bottom:10px; cursor:pointer; }
-.doc-icon { width:44px; height:44px; background:white; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
-.doc-name { font-size:14px; font-weight:600; color:var(--black); }
-.doc-meta { font-size:12px; color:var(--gray-muted); }
-.doc-badge { padding:4px 10px; background:#e8f5e9; color:#22c55e; border-radius:20px; font-size:11px; font-weight:700; }
+    /* ── BUTTONS ── */
+    .btn-pill {
+      width: 100%;
+      padding: 16px 24px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: var(--shadow-btn);
+      font-family: inherit;
+    }
 
-/* ── HISTORY ── */
-.hist-item { display:flex; align-items:center; gap:12px; padding:14px; background:var(--gray-bg); border-radius:16px; margin-bottom:10px; cursor:pointer; }
-.hist-icon { width:44px; height:44px; background:var(--navy); border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.hist-title { font-size:14px; font-weight:600; color:var(--black); }
-.hist-preview { font-size:12px; color:var(--gray-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px; }
-.hist-time { font-size:11px; color:var(--gray-muted); flex-shrink:0; }
+    .btn-pill:active {
+      opacity: 0.85;
+    }
 
-/* ── SETTINGS ── */
-.setting-group { background:var(--gray-bg); border-radius:20px; overflow:hidden; margin-bottom:16px; }
-.setting-item { display:flex; align-items:center; gap:12px; padding:16px; border-bottom:1px solid rgba(0,0,0,0.04); cursor:pointer; }
-.setting-item:last-child { border-bottom:none; }
-.setting-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.setting-label { font-size:14px; font-weight:600; color:var(--black); }
-.setting-value { font-size:12px; color:var(--gray-muted); }
-.setting-arrow { color:var(--gray-muted); font-size:18px; margin-left:auto; }
-.toggle { width:44px; height:26px; background:var(--navy); border-radius:var(--radius-pill); position:relative; cursor:pointer; flex-shrink:0; margin-left:auto; }
-.toggle::after { content:''; position:absolute; right:3px; top:3px; width:20px; height:20px; background:white; border-radius:50%; transition:all .2s; }
-.toggle.off { background:var(--gray-card); }
-.toggle.off::after { right:auto; left:3px; }
-.group-label { font-size:11px; font-weight:700; color:var(--gray-muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px; padding-left:4px; }
+    /* ── INPUTS ── */
+    .input-field {
+      width: 100%;
+      background: white;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 14px 20px;
+      font-size: 15px;
+      color: var(--black);
+      outline: none;
+      font-family: inherit;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
 
-/* ── SPLASH ── */
-#splash { align-items:center; justify-content:center; }
-#splash .made-by { position:absolute; bottom:40px; left:0; right:0; display:flex; flex-direction:column; align-items:center; gap:6px; }
-#splash .made-by .label { font-size:13px; color:var(--gray-muted); }
+    .input-field::placeholder {
+      color: var(--gray-muted);
+    }
 
-/* ── ONBOARDING ── */
-#onboarding .illus-area { position:absolute; top:0; left:0; right:0; height:62%; display:flex; align-items:center; justify-content:center; }
-#onboarding .bottom-content { position:absolute; bottom:0; left:0; right:0; padding:0 24px calc(var(--safe-bot) + 40px); text-align:center; }
-.tagline { font-size:17px; color:var(--gray-text); margin-bottom:6px; font-weight:500; }
-.subtitle { font-size:14px; color:var(--gray-muted); margin-bottom:28px; }
+    /* ── TAB BAR ── */
+    .tab-bar {
+      position: absolute;
+      bottom: calc(var(--safe-bot) + 16px);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 4px;
+      padding: 6px;
+      background: white;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+      z-index: 100;
+      white-space: nowrap;
+    }
 
-/* ── ONBOARDING BG ── */
-.bg-decor { position:absolute; top:0; left:0; right:0; bottom:0; pointer-events:none; overflow:hidden; z-index:0; }
+    .tab-btn {
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: transparent;
+      color: var(--gray-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
 
-/* ── LOADING / ERROR ── */
-.loading-indicator { display:flex; justify-content:center; padding:20px; }
-.error-msg { background:#fee2e2; border-radius:12px; padding:12px 16px; font-size:13px; color:#991b1b; margin:8px 0; }
-.success-msg { background:#d1fae5; border-radius:12px; padding:12px 16px; font-size:13px; color:#065f46; margin:8px 0; }
+    .tab-btn svg {
+      width: 16px;
+      height: 16px;
+    }
 
-/* ── DOC RESULT CHAT ── */
-.doc-result { background:var(--gray-bg); border-radius:16px; padding:16px; margin:12px 0; }
-.doc-result-title { font-size:13px; font-weight:700; color:var(--navy); margin-bottom:8px; }
-.doc-result-text { font-size:13px; color:var(--gray-text); line-height:1.6; }
+    .tab-btn.active {
+      background: var(--navy);
+      color: white;
+    }
 
-/* ── DONAT FOOTER ── */
-.donat-footer { padding:10px 20px; display:flex; align-items:center; justify-content:center; gap:6px; flex-shrink:0; }
-.donat-footer span { font-size:13px; font-weight:700; color:var(--black); }
-</style>
+    /* ── FORM CARD ── */
+    .form-card {
+      background: var(--gray-bg);
+      border-radius: var(--radius-xl);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      color: var(--gray-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--gray-muted);
+      text-align: center;
+    }
+
+    .hint a {
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* ── HOME ── */
+    .greeting {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--black);
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    .greeting-sub {
+      font-size: 14px;
+      color: var(--gray-muted);
+      margin-bottom: 20px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card {
+      background: var(--gray-bg);
+      border-radius: 20px;
+      padding: 18px 16px;
+      cursor: pointer;
+    }
+
+    .feature-card:active {
+      transform: scale(0.97);
+    }
+
+    .feature-card.wide {
+      grid-column: span 2;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--navy);
+      color: white;
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .feature-card.wide .feature-icon {
+      margin-bottom: 0;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .feature-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .feature-desc {
+      font-size: 12px;
+      color: var(--gray-muted);
+      margin-top: 2px;
+    }
+
+    .feature-card.wide .feature-name {
+      color: white;
+      font-size: 16px;
+    }
+
+    .feature-card.wide .feature-desc {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--black);
+      margin-bottom: 12px;
+    }
+
+    .recent-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-bg);
+      cursor: pointer;
+    }
+
+    .recent-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gray-bg);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .recent-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .recent-time {
+      font-size: 12px;
+      color: var(--gray-muted);
+    }
+
+    /* ── CHAT ── */
+    .chat-header {
+      padding: calc(var(--safe-top) + 8px) 20px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      flex-shrink: 0;
+    }
+
+    .chat-avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--navy);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .chat-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--black);
+    }
+
+    .chat-status {
+      font-size: 12px;
+      color: #22c55e;
+      font-weight: 500;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 80px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 8px;
+      max-width: 85%;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .msg-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .msg.user .msg-avatar {
+      background: var(--gray-bg);
+    }
+
+    .bubble {
+      background: var(--gray-bg);
+      border-radius: 18px 18px 18px 4px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--black);
+      line-height: 1.5;
+    }
+
+    .msg.user .bubble {
+      background: var(--navy);
+      color: white;
+      border-radius: 18px 18px 4px 18px;
+    }
+
+    .msg-time {
+      font-size: 10px;
+      color: var(--gray-muted);
+      margin-top: 4px;
+    }
+
+    .chat-input-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px calc(var(--safe-bot) + 12px);
+      background: white;
+      border-top: 1px solid var(--gray-bg);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: var(--gray-bg);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 12px 18px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      color: var(--black);
+    }
+
+    .chat-input::placeholder {
+      color: var(--gray-muted);
+    }
+
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--navy);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .attach-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--gray-bg);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .typing {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+      background: var(--gray-bg);
+      border-radius: 18px 18px 18px 4px;
+      width: fit-content;
+    }
+
+    .typing span {
+      width: 8px;
+      height: 8px;
+      background: var(--gray-muted);
+      border-radius: 50%;
+      animation: typing 1s infinite;
+    }
+
+    .typing span:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .typing span:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0)
+      }
+
+      30% {
+        transform: translateY(-6px)
+      }
+    }
+
+    /* ── SEARCH ── */
+    .page-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--black);
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .search-input {
+      flex: 1;
+      background: var(--gray-bg);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 14px 20px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      color: var(--black);
+    }
+
+    .search-input::placeholder {
+      color: var(--gray-muted);
+    }
+
+    .search-go {
+      width: 48px;
+      height: 48px;
+      background: var(--navy);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .result-card {
+      background: var(--gray-bg);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .result-source {
+      font-size: 11px;
+      color: var(--navy);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .result-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+
+    .result-snippet {
+      font-size: 13px;
+      color: var(--gray-text);
+      line-height: 1.5;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      padding-bottom: 4px;
+    }
+
+    .chip {
+      padding: 8px 14px;
+      background: var(--gray-bg);
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      color: var(--gray-text);
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .chip.active {
+      background: var(--navy);
+      color: white;
+    }
+
+    /* ── DOCUMENTS ── */
+    .upload-zone {
+      background: var(--gray-bg);
+      border-radius: var(--radius-xl);
+      padding: 32px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      border: 2px dashed var(--gray-card);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .upload-icon {
+      width: 60px;
+      height: 60px;
+      background: white;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .upload-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .upload-sub {
+      font-size: 13px;
+      color: var(--gray-muted);
+    }
+
+    .doc-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: var(--gray-bg);
+      border-radius: 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .doc-icon {
+      width: 44px;
+      height: 44px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .doc-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .doc-meta {
+      font-size: 12px;
+      color: var(--gray-muted);
+    }
+
+    .doc-badge {
+      padding: 4px 10px;
+      background: #e8f5e9;
+      color: #22c55e;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* ── HISTORY ── */
+    .hist-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: var(--gray-bg);
+      border-radius: 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .hist-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--navy);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .hist-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .hist-preview {
+      font-size: 12px;
+      color: var(--gray-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+
+    .hist-time {
+      font-size: 11px;
+      color: var(--gray-muted);
+      flex-shrink: 0;
+    }
+
+    /* ── SETTINGS ── */
+    .setting-group {
+      background: var(--gray-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      cursor: pointer;
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .setting-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .setting-value {
+      font-size: 12px;
+      color: var(--gray-muted);
+    }
+
+    .setting-arrow {
+      color: var(--gray-muted);
+      font-size: 18px;
+      margin-left: auto;
+    }
+
+    .toggle {
+      width: 44px;
+      height: 26px;
+      background: var(--navy);
+      border-radius: var(--radius-pill);
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      right: 3px;
+      top: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: all .2s;
+    }
+
+    .toggle.off {
+      background: var(--gray-card);
+    }
+
+    .toggle.off::after {
+      right: auto;
+      left: 3px;
+    }
+
+    .group-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    /* ── SPLASH ── */
+    #splash {
+      align-items: center;
+      justify-content: center;
+    }
+
+    #splash .made-by {
+      position: absolute;
+      bottom: 40px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #splash .made-by .label {
+      font-size: 13px;
+      color: var(--gray-muted);
+    }
+
+    /* ── ONBOARDING ── */
+    #onboarding .illus-area {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 62%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #onboarding .bottom-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 24px calc(var(--safe-bot) + 40px);
+      text-align: center;
+    }
+
+    .tagline {
+      font-size: 17px;
+      color: var(--gray-text);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--gray-muted);
+      margin-bottom: 28px;
+    }
+
+    /* ── ONBOARDING BG ── */
+    .bg-decor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    /* ── LOADING / ERROR ── */
+    .loading-indicator {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .error-msg {
+      background: #fee2e2;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #991b1b;
+      margin: 8px 0;
+    }
+
+    .success-msg {
+      background: #d1fae5;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #065f46;
+      margin: 8px 0;
+    }
+
+    /* ── DOC RESULT CHAT ── */
+    .doc-result {
+      background: var(--gray-bg);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 12px 0;
+    }
+
+    .doc-result-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .doc-result-text {
+      font-size: 13px;
+      color: var(--gray-text);
+      line-height: 1.6;
+    }
+
+    /* ── DONAT FOOTER ── */
+    .donat-footer {
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .donat-footer span {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ═══════ SPLASH ═══════ -->
-<div class="page active" id="splash">
-  <div id="logoSvg">
-    <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-      <defs><linearGradient id="g1" x1="10" y1="10" x2="100" y2="100"><stop offset="0%" stop-color="#1a2fb0"/><stop offset="100%" stop-color="#0d1b8e"/></linearGradient></defs>
-      <path d="M55 8 C29 8 8 29 8 55 C8 73 18 88 33 96" stroke="url(#g1)" stroke-width="10" stroke-linecap="round" fill="none"/>
-      <path d="M55 8 C81 8 102 29 102 55 C102 73 92 88 77 96" stroke="url(#g1)" stroke-width="10" stroke-linecap="round" fill="none"/>
-      <path d="M20 42 C20 33 27 26 36 26 L74 26 C83 26 90 33 90 42 L90 62 C90 71 83 78 74 78 L45 78 L33 90 L36 78 C27 78 20 71 20 62 Z" fill="url(#g1)"/>
-      <circle cx="41" cy="52" r="5" fill="white"/><circle cx="55" cy="52" r="5" fill="white"/><circle cx="69" cy="52" r="5" fill="white"/>
-    </svg>
-  </div>
-  <div class="made-by">
-    <span class="label">made by</span>
-    <div style="display:flex;align-items:center;gap:6px">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#111" stroke-width="1.5"/><circle cx="9" cy="9" r="3" fill="#111"/></svg>
-      <span style="font-size:14px;font-weight:700;color:#111">DoNat</span>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ ONBOARDING ═══════ -->
-<div class="page" id="onboarding">
-  <div class="bg-decor">
-    <svg width="100%" height="100%" viewBox="0 0 390 780" fill="none" preserveAspectRatio="none">
-      <path d="M-20 150 Q100 80 220 160 Q340 240 420 120" stroke="#e8e8f5" stroke-width="2.5" fill="none"/>
-      <path d="M-20 280 Q120 200 240 280 Q360 360 440 220" stroke="#e8e8f5" stroke-width="2.5" fill="none"/>
-      <path d="M0 400 Q130 320 260 400 Q380 480 460 340" stroke="#e8e8f5" stroke-width="2" fill="none"/>
-      <ellipse cx="60" cy="100" rx="55" ry="55" fill="#f0f0f8" opacity="0.8"/>
-      <ellipse cx="340" cy="180" rx="65" ry="65" fill="#f0f0f8" opacity="0.8"/>
-    </svg>
-  </div>
-  <div class="illus-area">
-    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
-      <defs><linearGradient id="g2" x1="15" y1="15" x2="145" y2="145"><stop offset="0%" stop-color="#1a2fb0"/><stop offset="100%" stop-color="#0d1b8e"/></linearGradient></defs>
-      <path d="M80 12 C43 12 12 43 12 80 C12 106 26 128 47 140" stroke="url(#g2)" stroke-width="14" stroke-linecap="round" fill="none"/>
-      <path d="M80 12 C117 12 148 43 148 80 C148 106 134 128 113 140" stroke="url(#g2)" stroke-width="14" stroke-linecap="round" fill="none"/>
-      <path d="M28 60 C28 48 38 38 50 38 L110 38 C122 38 132 48 132 60 L132 88 C132 100 122 110 110 110 L64 110 L48 128 L52 110 C38 110 28 100 28 88 Z" fill="url(#g2)"/>
-      <circle cx="60" cy="74" r="7" fill="white"/><circle cx="80" cy="74" r="7" fill="white"/><circle cx="100" cy="74" r="7" fill="white"/>
-    </svg>
-    <!-- Robot decoration -->
-    <div style="position:absolute;bottom:0;right:30px">
-      <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
-        <ellipse cx="36" cy="40" rx="28" ry="26" fill="#c4b5fd"/>
-        <ellipse cx="36" cy="38" rx="24" ry="22" fill="#a78bfa"/>
-        <circle cx="27" cy="38" r="6" fill="#1e1b4b"/><circle cx="45" cy="38" r="6" fill="#1e1b4b"/>
-        <circle cx="28" cy="37" r="2" fill="white"/><circle cx="46" cy="37" r="2" fill="white"/>
-        <rect x="28" y="47" width="16" height="4" rx="2" fill="#7c3aed" opacity="0.5"/>
+  <!-- ═══════ SPLASH ═══════ -->
+  <div class="page active" id="splash">
+    <div id="logoSvg">
+      <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
+        <defs>
+          <linearGradient id="g1" x1="10" y1="10" x2="100" y2="100">
+            <stop offset="0%" stop-color="#1a2fb0" />
+            <stop offset="100%" stop-color="#0d1b8e" />
+          </linearGradient>
+        </defs>
+        <path d="M55 8 C29 8 8 29 8 55 C8 73 18 88 33 96" stroke="url(#g1)" stroke-width="10" stroke-linecap="round"
+          fill="none" />
+        <path d="M55 8 C81 8 102 29 102 55 C102 73 92 88 77 96" stroke="url(#g1)" stroke-width="10"
+          stroke-linecap="round" fill="none" />
+        <path
+          d="M20 42 C20 33 27 26 36 26 L74 26 C83 26 90 33 90 42 L90 62 C90 71 83 78 74 78 L45 78 L33 90 L36 78 C27 78 20 71 20 62 Z"
+          fill="url(#g1)" />
+        <circle cx="41" cy="52" r="5" fill="white" />
+        <circle cx="55" cy="52" r="5" fill="white" />
+        <circle cx="69" cy="52" r="5" fill="white" />
       </svg>
     </div>
-  </div>
-  <div class="bottom-content">
-    <p class="tagline">Asisten AI untuk semua kebutuhan</p>
-    <p class="subtitle">Chat AI, cari informasi, dan baca dokumen<br>semuanya gratis dengan Gemini</p>
-    <button class="btn-pill" onclick="showPage('apikey')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Mulai Sekarang
-    </button>
-  </div>
-  <div class="donat-footer">
-    <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#111" stroke-width="1.5"/><circle cx="9" cy="9" r="3" fill="#111"/></svg>
-    <span>DoNat</span>
-  </div>
-</div>
-
-<!-- ═══════ API KEY SETUP ═══════ -->
-<div class="page" id="apikey">
-  <div class="header">
-    <div class="header-logo">
-      <svg width="34" height="34" viewBox="0 0 36 36" fill="none"><path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e"/><circle cx="13" cy="17" r="2" fill="white"/><circle cx="18" cy="17" r="2" fill="white"/><circle cx="23" cy="17" r="2" fill="white"/></svg>
-      <span>AiNbox</span>
-    </div>
-    <span class="header-tag">Setup</span>
-  </div>
-  <div class="scroll-content" style="padding-top:16px">
-    <p style="font-size:28px;font-weight:900;color:var(--black);letter-spacing:-0.5px;margin-bottom:6px">Masukkan<br>API Key</p>
-    <p style="font-size:14px;color:var(--gray-muted);margin-bottom:24px">Dapatkan API key gratis di <strong>aistudio.google.com</strong></p>
-    <div class="form-card">
-      <p class="form-label">Gemini API Key</p>
-      <input class="input-field" id="apiKeyInput" type="password" placeholder="AIzaSy...">
-      <p class="form-label">Pilih Model</p>
-      <select class="input-field" id="modelSelect" style="appearance:none;cursor:pointer">
-        <option value="gemini-2.0-flash">gemini-2.0-flash (Gratis, Cepat) ⚡</option>
-        <option value="gemini-1.5-flash">gemini-1.5-flash (Gratis)</option>
-        <option value="gemini-1.5-pro">gemini-1.5-pro (Gratis, Terbatas)</option>
-      </select>
-    </div>
-    <div id="apiKeyStatus"></div>
-    <p class="hint">Belum punya? <a href="https://aistudio.google.com/app/apikey" target="_blank">Daftar gratis di aistudio.google.com →</a></p>
-    <div style="height:20px"></div>
-    <button class="btn-pill" onclick="saveApiKey()">
-      Simpan & Lanjut
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </button>
-  </div>
-  <div class="donat-footer">
-    <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#111" stroke-width="1.5"/><circle cx="9" cy="9" r="3" fill="#111"/></svg>
-    <span>DoNat</span>
-  </div>
-  <div style="margin:0 16px 12px;background:var(--gray-bg);border-radius:16px;padding:14px 16px;font-size:13px;color:var(--gray-text)">
-    🔒 API key disimpan hanya di perangkat Anda
-  </div>
-</div>
-
-<!-- ═══════ HOME ═══════ -->
-<div class="page" id="home">
-  <div class="header">
-    <div class="header-logo">
-      <svg width="34" height="34" viewBox="0 0 36 36" fill="none"><path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e"/><circle cx="13" cy="17" r="2" fill="white"/><circle cx="18" cy="17" r="2" fill="white"/><circle cx="23" cy="17" r="2" fill="white"/></svg>
-      <span>AiNbox</span>
-    </div>
-    <span class="header-tag" id="homeModelTag">Home</span>
-  </div>
-  <div class="scroll-content">
-    <p class="greeting" id="homeGreeting">Halo! 👋</p>
-    <p class="greeting-sub">Mau ngapain hari ini?</p>
-    <div class="feature-grid">
-      <div class="feature-card wide" onclick="showPage('chat')">
-        <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        <div><p class="feature-name">Chat AI</p><p class="feature-desc">Tanya apa saja ke Gemini</p></div>
-      </div>
-      <div class="feature-card" onclick="showPage('search')">
-        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d1b8e" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
-        <p class="feature-name">Web Search</p><p class="feature-desc">Cari info terkini</p>
-      </div>
-      <div class="feature-card" onclick="showPage('docread')">
-        <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d1b8e" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-        <p class="feature-name">Baca Dokumen</p><p class="feature-desc">Upload PDF / foto</p>
-      </div>
-    </div>
-    <p class="section-title">Riwayat Terbaru</p>
-    <div id="homeHistory"><p style="font-size:13px;color:var(--gray-muted);text-align:center;padding:20px 0">Belum ada riwayat. Mulai chat!</p></div>
-  </div>
-  <div class="tab-bar">
-    <button class="tab-btn active" onclick="showPage('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Home</button>
-    <button class="tab-btn" onclick="showPage('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-    <button class="tab-btn" onclick="showPage('docread')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></button>
-    <button class="tab-btn" onclick="showPage('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-  </div>
-</div>
-
-<!-- ═══════ CHAT ═══════ -->
-<div class="page" id="chat">
-  <div class="chat-header">
-    <div style="cursor:pointer;padding:4px" onclick="showPage('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d1b8e" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div>
-    <div class="chat-avatar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-    <div style="flex:1"><p class="chat-name">AiNbox Chat</p><p class="chat-status" id="chatStatus">● Online · Gemini</p></div>
-    <button onclick="clearChat()" style="background:none;border:none;cursor:pointer;padding:4px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a0a0b8" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>
-  </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="msg">
-      <div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-      <div><div class="bubble">Halo! Saya AiNbox, asisten AI berbasis Gemini. Silakan tanya apa saja! 😊</div><p class="msg-time">Sekarang</p></div>
-    </div>
-  </div>
-  <div class="chat-input-bar">
-    <button class="attach-btn" onclick="document.getElementById('fileInputChat').click()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
-    <input type="file" id="fileInputChat" accept="image/*,application/pdf" style="display:none" onchange="handleChatFile(this)">
-    <input class="chat-input" id="chatInput" placeholder="Ketik pesan..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}">
-    <button class="send-btn" onclick="sendChat()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg></button>
-  </div>
-</div>
-
-<!-- ═══════ SEARCH ═══════ -->
-<div class="page" id="search">
-  <div class="header">
-    <div class="header-logo">
-      <svg width="34" height="34" viewBox="0 0 36 36" fill="none"><path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e"/><circle cx="13" cy="17" r="2" fill="white"/><circle cx="18" cy="17" r="2" fill="white"/><circle cx="23" cy="17" r="2" fill="white"/></svg>
-      <span>AiNbox</span>
-    </div>
-    <span class="header-tag">Search</span>
-  </div>
-  <div class="scroll-content" style="padding-top:12px">
-    <p class="page-title">Cari Sekarang</p>
-    <div class="search-bar">
-      <input class="search-input" id="searchInput" placeholder="Ketik pertanyaan..." onkeydown="if(event.key==='Enter')doSearch()">
-      <button class="search-go" onclick="doSearch()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-    </div>
-    <div class="chips">
-      <button class="chip active" onclick="setChip(this,'')">Semua</button>
-      <button class="chip" onclick="setChip(this,'berita terkini')">Berita</button>
-      <button class="chip" onclick="setChip(this,'teknologi')">Teknologi</button>
-      <button class="chip" onclick="setChip(this,'sains')">Sains</button>
-      <button class="chip" onclick="setChip(this,'Indonesia')">Indonesia</button>
-    </div>
-    <div id="searchResults">
-      <div style="text-align:center;padding:40px 0;color:var(--gray-muted)">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d0d0e8" stroke-width="1.5" stroke-linecap="round" style="margin:0 auto 12px;display:block"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <p style="font-size:14px">Ketik pertanyaan untuk mencari</p>
+    <div class="made-by">
+      <span class="label">made by</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="8" stroke="#111" stroke-width="1.5" />
+          <circle cx="9" cy="9" r="3" fill="#111" />
+        </svg>
+        <span style="font-size:14px;font-weight:700;color:#111">DoNat</span>
       </div>
     </div>
   </div>
-  <div class="tab-bar">
-    <button class="tab-btn" onclick="showPage('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></button>
-    <button class="tab-btn active" onclick="showPage('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Search</button>
-    <button class="tab-btn" onclick="showPage('docread')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></button>
-    <button class="tab-btn" onclick="showPage('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-  </div>
-</div>
 
-<!-- ═══════ DOCUMENT READER ═══════ -->
-<div class="page" id="docread">
-  <div class="header">
-    <div class="header-logo">
-      <svg width="34" height="34" viewBox="0 0 36 36" fill="none"><path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e"/><circle cx="13" cy="17" r="2" fill="white"/><circle cx="18" cy="17" r="2" fill="white"/><circle cx="23" cy="17" r="2" fill="white"/></svg>
-      <span>AiNbox</span>
+  <!-- ═══════ ONBOARDING ═══════ -->
+  <div class="page" id="onboarding">
+    <div class="bg-decor">
+      <svg width="100%" height="100%" viewBox="0 0 390 780" fill="none" preserveAspectRatio="none">
+        <path d="M-20 150 Q100 80 220 160 Q340 240 420 120" stroke="#e8e8f5" stroke-width="2.5" fill="none" />
+        <path d="M-20 280 Q120 200 240 280 Q360 360 440 220" stroke="#e8e8f5" stroke-width="2.5" fill="none" />
+        <path d="M0 400 Q130 320 260 400 Q380 480 460 340" stroke="#e8e8f5" stroke-width="2" fill="none" />
+        <ellipse cx="60" cy="100" rx="55" ry="55" fill="#f0f0f8" opacity="0.8" />
+        <ellipse cx="340" cy="180" rx="65" ry="65" fill="#f0f0f8" opacity="0.8" />
+      </svg>
     </div>
-    <span class="header-tag">Dokumen</span>
-  </div>
-  <div class="scroll-content" style="padding-top:12px">
-    <p class="page-title">Baca Dokumen</p>
-    <p style="font-size:14px;color:var(--gray-muted);margin-bottom:20px;margin-top:-10px">Upload PDF atau foto dokumen</p>
-    <div class="upload-zone" onclick="document.getElementById('fileInputDoc').click()">
-      <div class="upload-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0d1b8e" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-      <p class="upload-title">Tap untuk upload</p>
-      <p class="upload-sub">PDF, JPG, PNG · Maks 20MB</p>
-    </div>
-    <input type="file" id="fileInputDoc" accept="image/*,application/pdf" style="display:none" onchange="handleDocUpload(this)">
-    <div id="docResult"></div>
-    <div id="docHistory"></div>
-  </div>
-  <div class="tab-bar">
-    <button class="tab-btn" onclick="showPage('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></button>
-    <button class="tab-btn" onclick="showPage('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-    <button class="tab-btn active" onclick="showPage('docread')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Dokumen</button>
-    <button class="tab-btn" onclick="showPage('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-  </div>
-</div>
-
-<!-- ═══════ SETTINGS ═══════ -->
-<div class="page" id="settings">
-  <div class="header">
-    <div class="header-logo">
-      <svg width="34" height="34" viewBox="0 0 36 36" fill="none"><path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e"/><circle cx="13" cy="17" r="2" fill="white"/><circle cx="18" cy="17" r="2" fill="white"/><circle cx="23" cy="17" r="2" fill="white"/></svg>
-      <span>AiNbox</span>
-    </div>
-    <span class="header-tag">Settings</span>
-  </div>
-  <div class="scroll-content" style="padding-top:12px">
-    <p style="font-size:28px;font-weight:900;color:var(--black);letter-spacing:-0.5px;margin-bottom:20px">Pengaturan</p>
-    <p class="group-label">API & Model</p>
-    <div class="setting-group">
-      <div class="setting-item" onclick="showPage('apikey')">
-        <div class="setting-icon" style="background:#e8eaf6"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d1b8e" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-        <div style="flex:1"><p class="setting-label">Gemini API Key</p><p class="setting-value" id="settingKeyDisplay">Belum diset</p></div>
-        <span class="setting-arrow">›</span>
-      </div>
-      <div class="setting-item">
-        <div class="setting-icon" style="background:#e8f5e9"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
-        <div style="flex:1"><p class="setting-label">Model AI</p><p class="setting-value" id="settingModelDisplay">-</p></div>
-        <span class="setting-arrow">›</span>
+    <div class="illus-area">
+      <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+        <defs>
+          <linearGradient id="g2" x1="15" y1="15" x2="145" y2="145">
+            <stop offset="0%" stop-color="#1a2fb0" />
+            <stop offset="100%" stop-color="#0d1b8e" />
+          </linearGradient>
+        </defs>
+        <path d="M80 12 C43 12 12 43 12 80 C12 106 26 128 47 140" stroke="url(#g2)" stroke-width="14"
+          stroke-linecap="round" fill="none" />
+        <path d="M80 12 C117 12 148 43 148 80 C148 106 134 128 113 140" stroke="url(#g2)" stroke-width="14"
+          stroke-linecap="round" fill="none" />
+        <path
+          d="M28 60 C28 48 38 38 50 38 L110 38 C122 38 132 48 132 60 L132 88 C132 100 122 110 110 110 L64 110 L48 128 L52 110 C38 110 28 100 28 88 Z"
+          fill="url(#g2)" />
+        <circle cx="60" cy="74" r="7" fill="white" />
+        <circle cx="80" cy="74" r="7" fill="white" />
+        <circle cx="100" cy="74" r="7" fill="white" />
+      </svg>
+      <!-- Robot decoration -->
+      <div style="position:absolute;bottom:0;right:30px">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+          <ellipse cx="36" cy="40" rx="28" ry="26" fill="#c4b5fd" />
+          <ellipse cx="36" cy="38" rx="24" ry="22" fill="#a78bfa" />
+          <circle cx="27" cy="38" r="6" fill="#1e1b4b" />
+          <circle cx="45" cy="38" r="6" fill="#1e1b4b" />
+          <circle cx="28" cy="37" r="2" fill="white" />
+          <circle cx="46" cy="37" r="2" fill="white" />
+          <rect x="28" y="47" width="16" height="4" rx="2" fill="#7c3aed" opacity="0.5" />
+        </svg>
       </div>
     </div>
-    <p class="group-label">Lainnya</p>
-    <div class="setting-group">
-      <div class="setting-item" onclick="clearHistory()">
-        <div class="setting-icon" style="background:#fee2e2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
-        <div style="flex:1"><p class="setting-label">Hapus Semua History</p><p class="setting-value">Bersihkan riwayat chat</p></div>
-        <span class="setting-arrow" style="color:#ef4444">›</span>
-      </div>
-      <div class="setting-item">
-        <div class="setting-icon" style="background:#f0f0f8"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-        <div style="flex:1"><p class="setting-label">Versi App</p><p class="setting-value">AiNbox v1.0.0 · by DoNat</p></div>
-      </div>
+    <div class="bottom-content">
+      <p class="tagline">Asisten AI untuk semua kebutuhan</p>
+      <p class="subtitle">Chat AI, cari informasi, dan baca dokumen<br>semuanya gratis dengan Gemini</p>
+      <button class="btn-pill" onclick="showPage('apikey')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
+          stroke-linecap="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        Mulai Sekarang
+      </button>
+    </div>
+    <div class="donat-footer">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+        <circle cx="9" cy="9" r="8" stroke="#111" stroke-width="1.5" />
+        <circle cx="9" cy="9" r="3" fill="#111" />
+      </svg>
+      <span>DoNat</span>
     </div>
   </div>
-  <div class="tab-bar">
-    <button class="tab-btn" onclick="showPage('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></button>
-    <button class="tab-btn" onclick="showPage('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-    <button class="tab-btn" onclick="showPage('docread')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></button>
-    <button class="tab-btn active" onclick="showPage('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button>
+
+  <!-- ═══════ API KEY SETUP ═══════ -->
+  <div class="page" id="apikey">
+    <div class="header">
+      <div class="header-logo">
+        <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e" />
+          <circle cx="13" cy="17" r="2" fill="white" />
+          <circle cx="18" cy="17" r="2" fill="white" />
+          <circle cx="23" cy="17" r="2" fill="white" />
+        </svg>
+        <span>AiNbox</span>
+      </div>
+      <span class="header-tag">Setup</span>
+    </div>
+    <div class="scroll-content" style="padding-top:16px">
+      <p style="font-size:28px;font-weight:900;color:var(--black);letter-spacing:-0.5px;margin-bottom:6px">
+        Masukkan<br>API Key</p>
+      <p style="font-size:14px;color:var(--gray-muted);margin-bottom:24px">Dapatkan API key gratis di
+        <strong>aistudio.google.com</strong>
+      </p>
+      <div class="form-card">
+        <p class="form-label">Gemini API Key</p>
+        <input class="input-field" id="apiKeyInput" type="password" placeholder="AIzaSy...">
+        <p class="form-label">Pilih Model</p>
+        <select class="input-field" id="modelSelect" style="appearance:none;cursor:pointer">
+          <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite (Gratis, Cepat) ⚡</option>
+          <option value="gemini-2.5-flash">gemini-2.5-flash (Gratis)</option>
+          <option value="gemini-3.5-flash">gemini-3.5-flash (Gratis, Terbaru)</option>
+        </select>
+      </div>
+      <div id="apiKeyStatus"></div>
+      <p class="hint">Belum punya? <a href="https://aistudio.google.com/app/apikey" target="_blank">Daftar gratis di
+          aistudio.google.com →</a></p>
+      <div style="height:20px"></div>
+      <button class="btn-pill" onclick="saveApiKey()">
+        Simpan & Lanjut
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
+          stroke-linecap="round">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+    <div class="donat-footer">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+        <circle cx="9" cy="9" r="8" stroke="#111" stroke-width="1.5" />
+        <circle cx="9" cy="9" r="3" fill="#111" />
+      </svg>
+      <span>DoNat</span>
+    </div>
+    <div
+      style="margin:0 16px 12px;background:var(--gray-bg);border-radius:16px;padding:14px 16px;font-size:13px;color:var(--gray-text)">
+      🔒 API key disimpan hanya di perangkat Anda
+    </div>
   </div>
-</div>
 
-<script>
-// ── STATE ──
-var API_KEY = localStorage.getItem('gemini_api_key') || '';
-var MODEL = localStorage.getItem('gemini_model') || 'gemini-2.0-flash';
-var chatHistory = [];
-var searchChipFilter = '';
-var docHistory = JSON.parse(localStorage.getItem('doc_history') || '[]');
-var appHistory = JSON.parse(localStorage.getItem('app_history') || '[]');
+  <!-- ═══════ HOME ═══════ -->
+  <div class="page" id="home">
+    <div class="header">
+      <div class="header-logo">
+        <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e" />
+          <circle cx="13" cy="17" r="2" fill="white" />
+          <circle cx="18" cy="17" r="2" fill="white" />
+          <circle cx="23" cy="17" r="2" fill="white" />
+        </svg>
+        <span>AiNbox</span>
+      </div>
+      <span class="header-tag" id="homeModelTag">Home</span>
+    </div>
+    <div class="scroll-content">
+      <p class="greeting" id="homeGreeting">Halo! 👋</p>
+      <p class="greeting-sub">Mau ngapain hari ini?</p>
+      <div class="feature-grid">
+        <div class="feature-card wide" onclick="showPage('chat')">
+          <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white"
+              stroke-width="2.5" stroke-linecap="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg></div>
+          <div>
+            <p class="feature-name">Chat AI</p>
+            <p class="feature-desc">Tanya apa saja ke Gemini</p>
+          </div>
+        </div>
+        <div class="feature-card" onclick="showPage('search')">
+          <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d1b8e"
+              stroke-width="2.5" stroke-linecap="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg></div>
+          <p class="feature-name">Web Search</p>
+          <p class="feature-desc">Cari info terkini</p>
+        </div>
+        <div class="feature-card" onclick="showPage('docread')">
+          <div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d1b8e"
+              stroke-width="2.5" stroke-linecap="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg></div>
+          <p class="feature-name">Baca Dokumen</p>
+          <p class="feature-desc">Upload PDF / foto</p>
+        </div>
+      </div>
+      <p class="section-title">Riwayat Terbaru</p>
+      <div id="homeHistory">
+        <p style="font-size:13px;color:var(--gray-muted);text-align:center;padding:20px 0">Belum ada riwayat. Mulai
+          chat!</p>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showPage('home')"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </svg> Home</button>
+      <button class="tab-btn" onclick="showPage('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg></button>
+      <button class="tab-btn" onclick="showPage('docread')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        </svg></button>
+      <button class="tab-btn" onclick="showPage('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg></button>
+    </div>
+  </div>
 
-// ── INIT ──
-window.onload = function() {
-  setTimeout(function() {
-    if (API_KEY) { showPage('home'); }
-    else { showPage('onboarding'); }
-    updateSettingsDisplay();
-    renderHomeHistory();
-    renderDocHistory();
-  }, 1800);
-};
+  <!-- ═══════ CHAT ═══════ -->
+  <div class="page" id="chat">
+    <div class="chat-header">
+      <div style="cursor:pointer;padding:4px" onclick="showPage('home')"><svg width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="#0d1b8e" stroke-width="2.5" stroke-linecap="round">
+          <path d="M15 18l-6-6 6-6" />
+        </svg></div>
+      <div class="chat-avatar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white"
+          stroke-width="2" stroke-linecap="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg></div>
+      <div style="flex:1">
+        <p class="chat-name">AiNbox Chat</p>
+        <p class="chat-status" id="chatStatus">● Online · Gemini</p>
+      </div>
+      <button onclick="clearChat()" style="background:none;border:none;cursor:pointer;padding:4px"><svg width="18"
+          height="18" viewBox="0 0 24 24" fill="none" stroke="#a0a0b8" stroke-width="2" stroke-linecap="round">
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+        </svg></button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg">
+        <div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white"
+            stroke-width="2" stroke-linecap="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg></div>
+        <div>
+          <div class="bubble">Halo! Saya AiNbox, asisten AI berbasis Gemini. Silakan tanya apa saja! 😊</div>
+          <p class="msg-time">Sekarang</p>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-bar">
+      <button class="attach-btn" onclick="document.getElementById('fileInputChat').click()"><svg width="20" height="20"
+          viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round">
+          <path
+            d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+        </svg></button>
+      <input type="file" id="fileInputChat" accept="image/*,application/pdf" style="display:none"
+        onchange="handleChatFile(this)">
+      <input class="chat-input" id="chatInput" placeholder="Ketik pesan..."
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}">
+      <button class="send-btn" onclick="sendChat()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="white" stroke-width="2.5" stroke-linecap="round">
+          <path d="M22 2L11 13" />
+          <path d="M22 2L15 22 11 13 2 9l20-7z" />
+        </svg></button>
+    </div>
+  </div>
 
-// ── PAGE NAVIGATION ──
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  document.getElementById(id).classList.add('active');
-  if (id === 'home') { renderHomeHistory(); updateHomeGreeting(); }
-  if (id === 'settings') { updateSettingsDisplay(); }
-  if (id === 'chat') {
-    document.getElementById('chatStatus').textContent = '● Online · ' + MODEL;
-    setTimeout(function(){ scrollChatToBottom(); }, 100);
-  }
-  if (id === 'apikey') {
-    if (API_KEY) document.getElementById('apiKeyInput').value = API_KEY;
-    document.getElementById('modelSelect').value = MODEL;
-  }
-}
+  <!-- ═══════ SEARCH ═══════ -->
+  <div class="page" id="search">
+    <div class="header">
+      <div class="header-logo">
+        <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e" />
+          <circle cx="13" cy="17" r="2" fill="white" />
+          <circle cx="18" cy="17" r="2" fill="white" />
+          <circle cx="23" cy="17" r="2" fill="white" />
+        </svg>
+        <span>AiNbox</span>
+      </div>
+      <span class="header-tag">Search</span>
+    </div>
+    <div class="scroll-content" style="padding-top:12px">
+      <p class="page-title">Cari Sekarang</p>
+      <div class="search-bar">
+        <input class="search-input" id="searchInput" placeholder="Ketik pertanyaan..."
+          onkeydown="if(event.key==='Enter')doSearch()">
+        <button class="search-go" onclick="doSearch()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="white" stroke-width="2.5" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg></button>
+      </div>
+      <div class="chips">
+        <button class="chip active" onclick="setChip(this,'')">Semua</button>
+        <button class="chip" onclick="setChip(this,'berita terkini')">Berita</button>
+        <button class="chip" onclick="setChip(this,'teknologi')">Teknologi</button>
+        <button class="chip" onclick="setChip(this,'sains')">Sains</button>
+        <button class="chip" onclick="setChip(this,'Indonesia')">Indonesia</button>
+      </div>
+      <div id="searchResults">
+        <div style="text-align:center;padding:40px 0;color:var(--gray-muted)">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d0d0e8" stroke-width="1.5"
+            stroke-linecap="round" style="margin:0 auto 12px;display:block">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <p style="font-size:14px">Ketik pertanyaan untuk mencari</p>
+        </div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn" onclick="showPage('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </svg></button>
+      <button class="tab-btn active" onclick="showPage('search')"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg> Search</button>
+      <button class="tab-btn" onclick="showPage('docread')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        </svg></button>
+      <button class="tab-btn" onclick="showPage('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg></button>
+    </div>
+  </div>
 
-// ── GREETING ──
-function updateHomeGreeting() {
-  var h = new Date().getHours();
-  var g = h < 12 ? 'Selamat Pagi! 🌅' : h < 17 ? 'Selamat Siang! ☀️' : h < 20 ? 'Selamat Sore! 🌤️' : 'Selamat Malam! 🌙';
-  document.getElementById('homeGreeting').textContent = g;
-  document.getElementById('homeModelTag').textContent = MODEL;
-}
+  <!-- ═══════ DOCUMENT READER ═══════ -->
+  <div class="page" id="docread">
+    <div class="header">
+      <div class="header-logo">
+        <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e" />
+          <circle cx="13" cy="17" r="2" fill="white" />
+          <circle cx="18" cy="17" r="2" fill="white" />
+          <circle cx="23" cy="17" r="2" fill="white" />
+        </svg>
+        <span>AiNbox</span>
+      </div>
+      <span class="header-tag">Dokumen</span>
+    </div>
+    <div class="scroll-content" style="padding-top:12px">
+      <p class="page-title">Baca Dokumen</p>
+      <p style="font-size:14px;color:var(--gray-muted);margin-bottom:20px;margin-top:-10px">Upload PDF atau foto dokumen
+      </p>
+      <div class="upload-zone" onclick="document.getElementById('fileInputDoc').click()">
+        <div class="upload-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0d1b8e"
+            stroke-width="2" stroke-linecap="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg></div>
+        <p class="upload-title">Tap untuk upload</p>
+        <p class="upload-sub">PDF, JPG, PNG · Maks 20MB</p>
+      </div>
+      <input type="file" id="fileInputDoc" accept="image/*,application/pdf" style="display:none"
+        onchange="handleDocUpload(this)">
+      <div id="docResult"></div>
+      <div id="docHistory"></div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn" onclick="showPage('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </svg></button>
+      <button class="tab-btn" onclick="showPage('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg></button>
+      <button class="tab-btn active" onclick="showPage('docread')"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        </svg> Dokumen</button>
+      <button class="tab-btn" onclick="showPage('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg></button>
+    </div>
+  </div>
 
-// ── API KEY ──
-function saveApiKey() {
-  var key = document.getElementById('apiKeyInput').value.trim();
-  var model = document.getElementById('modelSelect').value;
-  var status = document.getElementById('apiKeyStatus');
-  if (!key || !key.startsWith('AIza')) {
-    status.innerHTML = '<div class="error-msg">⚠️ Masukkan API key yang valid (dimulai dengan AIza...)</div>';
-    return;
-  }
-  status.innerHTML = '<div style="text-align:center;padding:10px;color:var(--gray-muted);font-size:13px">Memverifikasi...</div>';
-  verifyApiKey(key, model, function(ok) {
-    if (ok) {
-      API_KEY = key; MODEL = model;
-      localStorage.setItem('gemini_api_key', key);
-      localStorage.setItem('gemini_model', model);
-      status.innerHTML = '<div class="success-msg">✅ API key valid! Masuk ke app...</div>';
-      setTimeout(function(){ showPage('home'); }, 1000);
-    } else {
-      status.innerHTML = '<div class="error-msg">❌ API key tidak valid atau tidak ada koneksi. Coba lagi.</div>';
+  <!-- ═══════ SETTINGS ═══════ -->
+  <div class="page" id="settings">
+    <div class="header">
+      <div class="header-logo">
+        <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3C10 3 3 10 3 18c0 6 3 11 8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M18 3c8 0 15 7 15 15c0 6-3 11-8 14" stroke="#0d1b8e" stroke-width="3.5" stroke-linecap="round"
+            fill="none" />
+          <path d="M7 13c0-3 3-6 6-6h10c3 0 6 3 6 6v8c0 3-3 6-6 6H15l-4 4 1-4c-3 0-5-3-5-6z" fill="#0d1b8e" />
+          <circle cx="13" cy="17" r="2" fill="white" />
+          <circle cx="18" cy="17" r="2" fill="white" />
+          <circle cx="23" cy="17" r="2" fill="white" />
+        </svg>
+        <span>AiNbox</span>
+      </div>
+      <span class="header-tag">Settings</span>
+    </div>
+    <div class="scroll-content" style="padding-top:12px">
+      <p style="font-size:28px;font-weight:900;color:var(--black);letter-spacing:-0.5px;margin-bottom:20px">Pengaturan
+      </p>
+      <p class="group-label">API & Model</p>
+      <div class="setting-group">
+        <div class="setting-item" onclick="showPage('apikey')">
+          <div class="setting-icon" style="background:#e8eaf6"><svg width="18" height="18" viewBox="0 0 24 24"
+              fill="none" stroke="#0d1b8e" stroke-width="2" stroke-linecap="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg></div>
+          <div style="flex:1">
+            <p class="setting-label">Gemini API Key</p>
+            <p class="setting-value" id="settingKeyDisplay">Belum diset</p>
+          </div>
+          <span class="setting-arrow">›</span>
+        </div>
+        <div class="setting-item">
+          <div class="setting-icon" style="background:#e8f5e9"><svg width="18" height="18" viewBox="0 0 24 24"
+              fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4l3 3" />
+            </svg></div>
+          <div style="flex:1">
+            <p class="setting-label">Model AI</p>
+            <p class="setting-value" id="settingModelDisplay">-</p>
+          </div>
+          <span class="setting-arrow">›</span>
+        </div>
+      </div>
+      <p class="group-label">Lainnya</p>
+      <div class="setting-group">
+        <div class="setting-item" onclick="clearHistory()">
+          <div class="setting-icon" style="background:#fee2e2"><svg width="18" height="18" viewBox="0 0 24 24"
+              fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+            </svg></div>
+          <div style="flex:1">
+            <p class="setting-label">Hapus Semua History</p>
+            <p class="setting-value">Bersihkan riwayat chat</p>
+          </div>
+          <span class="setting-arrow" style="color:#ef4444">›</span>
+        </div>
+        <div class="setting-item">
+          <div class="setting-icon" style="background:#f0f0f8"><svg width="18" height="18" viewBox="0 0 24 24"
+              fill="none" stroke="#555" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg></div>
+          <div style="flex:1">
+            <p class="setting-label">Versi App</p>
+            <p class="setting-value">AiNbox v1.0.0 · by DoNat</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn" onclick="showPage('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </svg></button>
+      <button class="tab-btn" onclick="showPage('search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg></button>
+      <button class="tab-btn" onclick="showPage('docread')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        </svg></button>
+      <button class="tab-btn active" onclick="showPage('settings')"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg> Settings</button>
+    </div>
+  </div>
+
+  <script>
+    // ── STATE ──
+    var API_KEY = localStorage.getItem('gemini_api_key') || '';
+    var MODEL = localStorage.getItem('gemini_model') || 'gemini-2.5-flash-lite';
+    var chatHistory = [];
+    var searchChipFilter = '';
+    var docHistory = JSON.parse(localStorage.getItem('doc_history') || '[]');
+    var appHistory = JSON.parse(localStorage.getItem('app_history') || '[]');
+
+    // ── INIT ──
+    window.onload = function () {
+      setTimeout(function () {
+        if (API_KEY) { showPage('home'); }
+        else { showPage('onboarding'); }
+        updateSettingsDisplay();
+        renderHomeHistory();
+        renderDocHistory();
+      }, 1800);
+    };
+
+    // ── PAGE NAVIGATION ──
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('active'); });
+      document.getElementById(id).classList.add('active');
+      if (id === 'home') { renderHomeHistory(); updateHomeGreeting(); }
+      if (id === 'settings') { updateSettingsDisplay(); }
+      if (id === 'chat') {
+        document.getElementById('chatStatus').textContent = '● Online · ' + MODEL;
+        setTimeout(function () { scrollChatToBottom(); }, 100);
+      }
+      if (id === 'apikey') {
+        if (API_KEY) document.getElementById('apiKeyInput').value = API_KEY;
+        document.getElementById('modelSelect').value = MODEL;
+      }
     }
-  });
-}
 
-function verifyApiKey(key, model, cb) {
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + key, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts: [{ text: 'Hi' }] }], generationConfig: { maxOutputTokens: 5 } })
-  }).then(function(r){ cb(r.ok); }).catch(function(){ cb(false); });
-}
-
-// ── GEMINI API ──
-function callGemini(messages, cb) {
-  if (!API_KEY) { cb(null, 'API key belum diset. Masuk ke Settings.'); return; }
-  var body = { contents: messages, generationConfig: { maxOutputTokens: 1000, temperature: 0.7 } };
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/' + MODEL + ':generateContent?key=' + API_KEY, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    if (data.candidates && data.candidates[0]) {
-      cb(data.candidates[0].content.parts[0].text, null);
-    } else {
-      cb(null, 'Tidak ada respons. Cek API key Anda.');
+    // ── GREETING ──
+    function updateHomeGreeting() {
+      var h = new Date().getHours();
+      var g = h < 12 ? 'Selamat Pagi! 🌅' : h < 17 ? 'Selamat Siang! ☀️' : h < 20 ? 'Selamat Sore! 🌤️' : 'Selamat Malam! 🌙';
+      document.getElementById('homeGreeting').textContent = g;
+      document.getElementById('homeModelTag').textContent = MODEL;
     }
-  })
-  .catch(function(e){ cb(null, 'Error: ' + e.message); });
-}
 
-// ── CHAT ──
-function sendChat() {
-  var input = document.getElementById('chatInput');
-  var text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  addChatMsg('user', text);
-  chatHistory.push({ role: 'user', parts: [{ text: text }] });
-  saveToHistory('chat', text);
-  showTyping();
-  callGemini(chatHistory, function(reply, err) {
-    removeTyping();
-    var msg = err || reply;
-    addChatMsg('ai', msg);
-    if (!err) chatHistory.push({ role: 'model', parts: [{ text: reply }] });
-  });
-}
+    // ── API KEY ──
+    function saveApiKey() {
+      var key = document.getElementById('apiKeyInput').value.trim();
+      var model = document.getElementById('modelSelect').value;
+      var status = document.getElementById('apiKeyStatus');
 
-function addChatMsg(role, text) {
-  var msgs = document.getElementById('chatMessages');
-  var now = new Date().toLocaleTimeString('id', { hour: '2-digit', minute: '2-digit' });
-  var isUser = role === 'user';
-  var div = document.createElement('div');
-  div.className = 'msg' + (isUser ? ' user' : '');
-  div.innerHTML = (isUser
-    ? '<div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>'
-    : '<div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>')
-    + '<div><div class="bubble">' + escHtml(text) + '</div><p class="msg-time"' + (isUser ? ' style="text-align:right"' : '') + '>' + now + '</p></div>';
-  msgs.appendChild(div);
-  scrollChatToBottom();
-}
+      // Diubah agar mendukung format baru (AQ.) atau format lama (AIza) jika masih ada
+      if (!key || (!key.startsWith('AQ.') && !key.startsWith('AIza'))) {
+        status.innerHTML = '<div class="error-msg">⚠️ Masukkan API key yang valid (dimulai dengan AQ. atau AIza...)</div>';
+        return;
+      }
 
-function showTyping() {
-  var msgs = document.getElementById('chatMessages');
-  var div = document.createElement('div');
-  div.className = 'msg'; div.id = 'typingIndicator';
-  div.innerHTML = '<div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="typing"><span></span><span></span><span></span></div>';
-  msgs.appendChild(div);
-  scrollChatToBottom();
-}
+      status.innerHTML = '<div style="text-align:center;padding:10px;color:var(--gray-muted);font-size:13px">Memverifikasi...</div>';
+      verifyApiKey(key, model, function (ok) {
+        if (ok) {
+          API_KEY = key; MODEL = model;
+          localStorage.setItem('gemini_api_key', key);
+          localStorage.setItem('gemini_model', model);
+          status.innerHTML = '<div class="success-msg">✅ API key valid! Masuk ke app...</div>';
+          setTimeout(function () { showPage('home'); }, 1000);
+        } else {
+          status.innerHTML = '<div class="error-msg">❌ API key tidak valid atau tidak ada koneksi. Coba lagi.</div>';
+        }
+      });
+    }
 
-function removeTyping() {
-  var t = document.getElementById('typingIndicator');
-  if (t) t.remove();
-}
+    function verifyApiKey(key, model, cb) {
+      fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + key, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: 'Hi' }] }], generationConfig: { maxOutputTokens: 5 } })
+      }).then(function (r) { cb(r.ok); }).catch(function () { cb(false); });
+    }
 
-function scrollChatToBottom() {
-  var msgs = document.getElementById('chatMessages');
-  msgs.scrollTop = msgs.scrollHeight;
-}
+    // ── GEMINI API ──
+    function callGemini(messages, cb) {
+      if (!API_KEY) { cb(null, 'API key belum diset. Masuk ke Settings.'); return; }
+      var body = { contents: messages, generationConfig: { maxOutputTokens: 1000, temperature: 0.7 } };
+      fetch('https://generativelanguage.googleapis.com/v1beta/models/' + MODEL + ':generateContent?key=' + API_KEY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data.candidates && data.candidates[0]) {
+            cb(data.candidates[0].content.parts[0].text, null);
+          } else {
+            cb(null, 'Tidak ada respons. Cek API key Anda.');
+          }
+        })
+        .catch(function (e) { cb(null, 'Error: ' + e.message); });
+    }
 
-function clearChat() {
-  chatHistory = [];
-  var msgs = document.getElementById('chatMessages');
-  msgs.innerHTML = '<div class="msg"><div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div><div class="bubble">Chat dibersihkan. Ada yang bisa saya bantu? 😊</div></div></div>';
-}
+    // ── CHAT ──
+    function sendChat() {
+      var input = document.getElementById('chatInput');
+      var text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      addChatMsg('user', text);
+      chatHistory.push({ role: 'user', parts: [{ text: text }] });
+      saveToHistory('chat', text);
+      showTyping();
+      callGemini(chatHistory, function (reply, err) {
+        removeTyping();
+        var msg = err || reply;
+        addChatMsg('ai', msg);
+        if (!err) chatHistory.push({ role: 'model', parts: [{ text: reply }] });
+      });
+    }
 
-function handleChatFile(input) {
-  var file = input.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var b64 = e.target.result.split(',')[1];
-    var mime = file.type;
-    addChatMsg('user', '📎 ' + file.name);
-    showTyping();
-    var prompt = 'Analisis dan jelaskan isi dari file/gambar/dokumen ini secara detail dalam bahasa Indonesia.';
-    var msgs = [{ role: 'user', parts: [{ inline_data: { mime_type: mime, data: b64 } }, { text: prompt }] }];
-    callGemini(msgs, function(reply, err) {
-      removeTyping();
-      addChatMsg('ai', err || reply);
-    });
-  };
-  reader.readAsDataURL(file);
-  input.value = '';
-}
+    function addChatMsg(role, text) {
+      var msgs = document.getElementById('chatMessages');
+      var now = new Date().toLocaleTimeString('id', { hour: '2-digit', minute: '2-digit' });
+      var isUser = role === 'user';
+      var div = document.createElement('div');
+      div.className = 'msg' + (isUser ? ' user' : '');
+      div.innerHTML = (isUser
+        ? '<div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>'
+        : '<div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>')
+        + '<div><div class="bubble">' + escHtml(text) + '</div><p class="msg-time"' + (isUser ? ' style="text-align:right"' : '') + '>' + now + '</p></div>';
+      msgs.appendChild(div);
+      scrollChatToBottom();
+    }
 
-// ── SEARCH ──
-var searchFilter = '';
-function setChip(el, filter) {
-  document.querySelectorAll('#search .chip').forEach(function(c){ c.classList.remove('active'); });
-  el.classList.add('active');
-  searchFilter = filter;
-}
+    function showTyping() {
+      var msgs = document.getElementById('chatMessages');
+      var div = document.createElement('div');
+      div.className = 'msg'; div.id = 'typingIndicator';
+      div.innerHTML = '<div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="typing"><span></span><span></span><span></span></div>';
+      msgs.appendChild(div);
+      scrollChatToBottom();
+    }
 
-function doSearch() {
-  var q = document.getElementById('searchInput').value.trim();
-  if (!q) return;
-  var fullQ = searchFilter ? q + ' ' + searchFilter : q;
-  var results = document.getElementById('searchResults');
-  results.innerHTML = '<div class="loading-indicator"><div class="typing"><span></span><span></span><span></span></div></div>';
-  saveToHistory('search', q);
-  var prompt = 'Kamu adalah mesin pencari AI. Cari dan jawab pertanyaan ini secara komprehensif: "' + fullQ + '". Berikan jawaban terstruktur dengan: 1) Jawaban langsung/ringkasan, 2) Penjelasan detail, 3) Fakta-fakta penting. Gunakan bahasa Indonesia yang jelas. Format dengan paragraf yang rapi.';
-  callGemini([{ role: 'user', parts: [{ text: prompt }] }], function(reply, err) {
-    if (err) { results.innerHTML = '<div class="error-msg">❌ ' + err + '</div>'; return; }
-    var paragraphs = reply.split('\n').filter(function(p){ return p.trim(); });
-    var html = '<div class="result-card"><div class="result-source">✨ AiNbox AI · Powered by Gemini</div><p class="result-title">' + escHtml(q) + '</p>';
-    paragraphs.forEach(function(p){ html += '<p class="result-snippet" style="margin-bottom:8px">' + escHtml(p) + '</p>'; });
-    html += '</div>';
-    results.innerHTML = html;
-  });
-}
+    function removeTyping() {
+      var t = document.getElementById('typingIndicator');
+      if (t) t.remove();
+    }
 
-// ── DOCUMENT ──
-function handleDocUpload(input) {
-  var file = input.files[0];
-  if (!file) return;
-  var result = document.getElementById('docResult');
-  result.innerHTML = '<div class="loading-indicator"><div class="typing"><span></span><span></span><span></span></div></div><p style="text-align:center;font-size:13px;color:var(--gray-muted);margin-top:8px">Membaca dokumen...</p>';
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var b64 = e.target.result.split(',')[1];
-    var mime = file.type;
-    var prompt = 'Analisis dokumen/gambar ini secara menyeluruh dalam bahasa Indonesia. Berikan: 1) Ringkasan singkat, 2) Poin-poin utama, 3) Informasi penting lainnya. Jawab dengan format yang rapi dan mudah dibaca.';
-    var msgs = [{ role: 'user', parts: [{ inline_data: { mime_type: mime, data: b64 } }, { text: prompt }] }];
-    callGemini(msgs, function(reply, err) {
-      if (err) { result.innerHTML = '<div class="error-msg">❌ ' + err + '</div>'; return; }
-      result.innerHTML = '<div class="doc-result"><p class="doc-result-title">📄 ' + escHtml(file.name) + '</p><p class="doc-result-text">' + escHtml(reply).replace(/\n/g, '<br>') + '</p></div>';
-      var entry = { name: file.name, time: 'Baru saja', summary: reply.substring(0, 80) + '...' };
-      docHistory.unshift(entry);
-      if (docHistory.length > 10) docHistory.pop();
-      localStorage.setItem('doc_history', JSON.stringify(docHistory));
-      saveToHistory('doc', file.name);
-      renderDocHistory();
-    });
-  };
-  reader.readAsDataURL(file);
-  input.value = '';
-}
+    function scrollChatToBottom() {
+      var msgs = document.getElementById('chatMessages');
+      msgs.scrollTop = msgs.scrollHeight;
+    }
 
-function renderDocHistory() {
-  var el = document.getElementById('docHistory');
-  if (!docHistory.length) { el.innerHTML = ''; return; }
-  var html = '<p class="section-title" style="margin-top:8px">Dokumen Terbaru</p>';
-  docHistory.slice(0,5).forEach(function(d) {
-    html += '<div class="doc-item"><div class="doc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div style="flex:1"><p class="doc-name">' + escHtml(d.name) + '</p><p class="doc-meta">' + d.time + '</p></div><span class="doc-badge">Selesai</span></div>';
-  });
-  el.innerHTML = html;
-}
+    function clearChat() {
+      chatHistory = [];
+      var msgs = document.getElementById('chatMessages');
+      msgs.innerHTML = '<div class="msg"><div class="msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div><div class="bubble">Chat dibersihkan. Ada yang bisa saya bantu? 😊</div></div></div>';
+    }
 
-// ── HISTORY ──
-function saveToHistory(type, text) {
-  var icons = { chat:'💬', search:'🔍', doc:'📄' };
-  appHistory.unshift({ type: type, icon: icons[type], text: text, time: new Date().toLocaleTimeString('id',{hour:'2-digit',minute:'2-digit'}) });
-  if (appHistory.length > 20) appHistory.pop();
-  localStorage.setItem('app_history', JSON.stringify(appHistory));
-}
+    function handleChatFile(input) {
+      var file = input.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var b64 = e.target.result.split(',')[1];
+        var mime = file.type;
+        addChatMsg('user', '📎 ' + file.name);
+        showTyping();
+        var prompt = 'Analisis dan jelaskan isi dari file/gambar/dokumen ini secara detail dalam bahasa Indonesia.';
+        var msgs = [{ role: 'user', parts: [{ inline_data: { mime_type: mime, data: b64 } }, { text: prompt }] }];
+        callGemini(msgs, function (reply, err) {
+          removeTyping();
+          addChatMsg('ai', err || reply);
+        });
+      };
+      reader.readAsDataURL(file);
+      input.value = '';
+    }
 
-function renderHomeHistory() {
-  var el = document.getElementById('homeHistory');
-  if (!appHistory.length) { el.innerHTML = '<p style="font-size:13px;color:var(--gray-muted);text-align:center;padding:20px 0">Belum ada riwayat. Mulai chat!</p>'; return; }
-  var html = '';
-  appHistory.slice(0,5).forEach(function(h) {
-    html += '<div class="recent-item"><div class="recent-icon" style="font-size:18px;display:flex;align-items:center;justify-content:center">' + h.icon + '</div><div style="flex:1"><p class="recent-title">' + escHtml(h.text.substring(0,40)) + (h.text.length>40?'...':'') + '</p><p class="recent-time">' + h.time + '</p></div></div>';
-  });
-  el.innerHTML = html;
-}
+    // ── SEARCH ──
+    var searchFilter = '';
+    function setChip(el, filter) {
+      document.querySelectorAll('#search .chip').forEach(function (c) { c.classList.remove('active'); });
+      el.classList.add('active');
+      searchFilter = filter;
+    }
 
-function clearHistory() {
-  if (confirm('Hapus semua riwayat?')) {
-    appHistory = []; docHistory = [];
-    localStorage.removeItem('app_history');
-    localStorage.removeItem('doc_history');
-    renderHomeHistory(); renderDocHistory();
-    alert('Riwayat dihapus.');
-  }
-}
+    function doSearch() {
+      var q = document.getElementById('searchInput').value.trim();
+      if (!q) return;
+      var fullQ = searchFilter ? q + ' ' + searchFilter : q;
+      var results = document.getElementById('searchResults');
+      results.innerHTML = '<div class="loading-indicator"><div class="typing"><span></span><span></span><span></span></div></div>';
+      saveToHistory('search', q);
+      var prompt = 'Kamu adalah mesin pencari AI. Cari dan jawab pertanyaan ini secara komprehensif: "' + fullQ + '". Berikan jawaban terstruktur dengan: 1) Jawaban langsung/ringkasan, 2) Penjelasan detail, 3) Fakta-fakta penting. Gunakan bahasa Indonesia yang jelas. Format dengan paragraf yang rapi.';
+      callGemini([{ role: 'user', parts: [{ text: prompt }] }], function (reply, err) {
+        if (err) { results.innerHTML = '<div class="error-msg">❌ ' + err + '</div>'; return; }
+        var paragraphs = reply.split('\n').filter(function (p) { return p.trim(); });
+        var html = '<div class="result-card"><div class="result-source">✨ AiNbox AI · Powered by Gemini</div><p class="result-title">' + escHtml(q) + '</p>';
+        paragraphs.forEach(function (p) { html += '<p class="result-snippet" style="margin-bottom:8px">' + escHtml(p) + '</p>'; });
+        html += '</div>';
+        results.innerHTML = html;
+      });
+    }
 
-// ── SETTINGS DISPLAY ──
-function updateSettingsDisplay() {
-  var k = localStorage.getItem('gemini_api_key') || '';
-  document.getElementById('settingKeyDisplay').textContent = k ? 'AIza••••' + k.slice(-4) : 'Belum diset';
-  document.getElementById('settingModelDisplay').textContent = localStorage.getItem('gemini_model') || '-';
-}
+    // ── DOCUMENT ──
+    function handleDocUpload(input) {
+      var file = input.files[0];
+      if (!file) return;
+      var result = document.getElementById('docResult');
+      result.innerHTML = '<div class="loading-indicator"><div class="typing"><span></span><span></span><span></span></div></div><p style="text-align:center;font-size:13px;color:var(--gray-muted);margin-top:8px">Membaca dokumen...</p>';
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var b64 = e.target.result.split(',')[1];
+        var mime = file.type;
+        var prompt = 'Analisis dokumen/gambar ini secara menyeluruh dalam bahasa Indonesia. Berikan: 1) Ringkasan singkat, 2) Poin-poin utama, 3) Informasi penting lainnya. Jawab dengan format yang rapi dan mudah dibaca.';
+        var msgs = [{ role: 'user', parts: [{ inline_data: { mime_type: mime, data: b64 } }, { text: prompt }] }];
+        callGemini(msgs, function (reply, err) {
+          if (err) { result.innerHTML = '<div class="error-msg">❌ ' + err + '</div>'; return; }
+          result.innerHTML = '<div class="doc-result"><p class="doc-result-title">📄 ' + escHtml(file.name) + '</p><p class="doc-result-text">' + escHtml(reply).replace(/\n/g, '<br>') + '</p></div>';
+          var entry = { name: file.name, time: 'Baru saja', summary: reply.substring(0, 80) + '...' };
+          docHistory.unshift(entry);
+          if (docHistory.length > 10) docHistory.pop();
+          localStorage.setItem('doc_history', JSON.stringify(docHistory));
+          saveToHistory('doc', file.name);
+          renderDocHistory();
+        });
+      };
+      reader.readAsDataURL(file);
+      input.value = '';
+    }
 
-// ── UTILS ──
-function escHtml(t) {
-  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-</script>
+    function renderDocHistory() {
+      var el = document.getElementById('docHistory');
+      if (!docHistory.length) { el.innerHTML = ''; return; }
+      var html = '<p class="section-title" style="margin-top:8px">Dokumen Terbaru</p>';
+      docHistory.slice(0, 5).forEach(function (d) {
+        html += '<div class="doc-item"><div class="doc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div style="flex:1"><p class="doc-name">' + escHtml(d.name) + '</p><p class="doc-meta">' + d.time + '</p></div><span class="doc-badge">Selesai</span></div>';
+      });
+      el.innerHTML = html;
+    }
+
+    // ── HISTORY ──
+    function saveToHistory(type, text) {
+      var icons = { chat: '💬', search: '🔍', doc: '📄' };
+      appHistory.unshift({ type: type, icon: icons[type], text: text, time: new Date().toLocaleTimeString('id', { hour: '2-digit', minute: '2-digit' }) });
+      if (appHistory.length > 20) appHistory.pop();
+      localStorage.setItem('app_history', JSON.stringify(appHistory));
+    }
+
+    function renderHomeHistory() {
+      var el = document.getElementById('homeHistory');
+      if (!appHistory.length) { el.innerHTML = '<p style="font-size:13px;color:var(--gray-muted);text-align:center;padding:20px 0">Belum ada riwayat. Mulai chat!</p>'; return; }
+      var html = '';
+      appHistory.slice(0, 5).forEach(function (h) {
+        html += '<div class="recent-item"><div class="recent-icon" style="font-size:18px;display:flex;align-items:center;justify-content:center">' + h.icon + '</div><div style="flex:1"><p class="recent-title">' + escHtml(h.text.substring(0, 40)) + (h.text.length > 40 ? '...' : '') + '</p><p class="recent-time">' + h.time + '</p></div></div>';
+      });
+      el.innerHTML = html;
+    }
+
+    function clearHistory() {
+      if (confirm('Hapus semua riwayat?')) {
+        appHistory = []; docHistory = [];
+        localStorage.removeItem('app_history');
+        localStorage.removeItem('doc_history');
+        renderHomeHistory(); renderDocHistory();
+        alert('Riwayat dihapus.');
+      }
+    }
+
+    // ── SETTINGS DISPLAY ──
+    function updateSettingsDisplay() {
+      var k = localStorage.getItem('gemini_api_key') || '';
+      document.getElementById('settingKeyDisplay').textContent = k ? 'AIza••••' + k.slice(-4) : 'Belum diset';
+      document.getElementById('settingModelDisplay').textContent = localStorage.getItem('gemini_model') || '-';
+    }
+
+    // ── UTILS ──
+    function escHtml(t) {
+      return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
 </body>
+
 </html>
