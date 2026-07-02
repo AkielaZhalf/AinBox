@@ -12,7 +12,6 @@ workflows:
       node: 20
       xcode: 16.0
       vars:
-        # Pindahkan pengaturan kedalaman klon ke sini (sebagai variabel lingkungan)
         CM_CLONE_DEPTH: 1 
     scripts:
       - name: Install dependencies
@@ -28,27 +27,10 @@ workflows:
           npx cap add ios || true
           npx cap sync ios
           
-      - name: Reset and Patch Project to iOS 12 (Safe Method)
+      - name: Patch Podfile - set iOS 12
         script: |
           cd ios/App
-          # Kembalikan file ke kondisi awal agar tidak ada sisa patch rusak sebelumnya
-          git checkout Podfile || true
-          git checkout App.xcodeproj/project.pbxproj || true
-          
-          # 1. Set platform utama di Podfile ke iOS 12
           sed -i '' "s/platform :ios, '[0-9.]*'/platform :ios, '12.0'/g" Podfile
-          
-          # 2. Paksa ubah target semua file xcconfig ke iOS 12
-          cd ../..
-          find ios -name "*.xcconfig" -exec sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 12.0/g' {} \; || true
-          
-          # 3. TRICK UTAMA: Paksa ubah versi Swift dan Target langsung di skrip proyek Xcode utama (.pbxproj)
-          # Ini akan menimpa setelan apa pun yang dikunci oleh Capacitor atau Pods
-          find ios -name "project.pbxproj" -exec sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 12.0/g' {} \; || true
-          find ios -name "project.pbxproj" -exec sed -i '' 's/SWIFT_VERSION = [0-9.]*/SWIFT_VERSION = 5.0/g' {} \; || true
-          
-          echo "=== Verifikasi Pengaturan Target Proyek ==="
-          grep -E "IPHONEOS_DEPLOYMENT_TARGET|SWIFT_VERSION" ios/App/App.xcodeproj/project.pbxproj | head -n 10
           
       - name: Pod install
         script: |
@@ -72,6 +54,8 @@ workflows:
             ONLY_ACTIVE_ARCH=YES \
             IPHONEOS_DEPLOYMENT_TARGET=12.0 \
             EXCLUDED_ARCHS="armv7 armv7s" \
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            OTHER_SWIFT_FLAGS="-Xfrontend -suppress-warnings" \
             build
             
       - name: Package .ipa
