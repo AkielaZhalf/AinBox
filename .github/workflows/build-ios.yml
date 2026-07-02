@@ -1,4 +1,4 @@
-name: Build IPA (AiNbox)
+name: Build IPA (AiNbox iOS 12)
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-ios:
-    runs-on: macos-latest
+    runs-on: macos-13
 
     steps:
       - name: Checkout repo
@@ -17,6 +17,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Use Xcode 15
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15,2'
 
       - name: Install dependencies
         run: npm install
