@@ -1,0 +1,74 @@
+workflows:
+  ios-build:
+    name: Build IPA (AiNbox iOS 12)
+    max_build_duration: 60
+    instance_type: mac_mini_m2 # Server Mac M2 Gratis dari Codemagic
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+    environment:
+      node: 20 # Sama dengan setup-node@v4 node-version: 20
+      xcode: 15.2 # Sama dengan setup-xcode xcode-version: 15.2
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+          
+      - name: Build web assets
+        script: |
+          npm run build
+          
+      - name: Add Capacitor iOS
+        script: |
+          npx cap add ios || true
+          npx cap sync ios
+          
+      - name: Patch Podfile - set iOS 12
+        script: |
+          cd ios/App
+          sed -i '' "s/platform :ios, '[0-9.]*/platform :ios, '12.0'/" Podfile
+          grep -q "platform :ios" Podfile || sed -1 '' '1s/^/platform :ios,'\''12.0'\''\n/' Podfile
+          head -10 Podfile
+          
+      - name: Set iOS 12 all xcconfig - set iOS 12
+        script: |
+          find ios -name "*.xcconfig" -exec sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 12.0/g' {} \; || true
+          
+      - name: Pod install
+        script: |
+          cd ios/App
+          pod install --repo-update
+          
+      - name: Build IPA (unsigned, iOS 12, for sideload)
+        script: |
+          cd ios/App
+          xcodebuild \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            ARCHS="arm64" \
+            ONLY_ACTIVE_ARCH=NO \
+            IPHONEOS_DEPLOYMENT_TARGET=12.0 \
+            build
+            
+      - name: Package .ipa
+        script: |
+          cd ios/App
+          APP_PATH=$(find build -name "*.app" | head -1)
+          echo "Found .app: $APP_PATH"
+          mkdir -p Payload
+          cp -r "$APP_PATH" Payload/
+          zip -r AiNbox.ipa Payload
+          echo "✅ IPA iOS 12 siap!"
+          ls -lh AiNbox.ipa
+          
+    artifacts:
+      # Menggantikan fungsi upload-artifact untuk menyimpan file ipa Anda
+      - ios/App/AiNbox.ipa
