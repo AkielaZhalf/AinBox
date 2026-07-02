@@ -31,9 +31,26 @@ workflows:
       - name: Patch Podfile - set iOS 12
         script: |
           cd ios/App
+          # Mengubah platform iOS bawaan menjadi 12.0
           sed -i '' "s/platform :ios, '[0-9.]*'/platform :ios, '12.0'/g" Podfile
+          
+          # Menyisipkan skrip pemaksa Swift Compiler agar mengabaikan error ketidakcocokan versi iOS lama
+          cat << 'EOF' >> Podfile
+
+          post_install do |installer|
+            installer.pods_project.targets.each do |target|
+              target.build_configurations.each do |config|
+                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+                config.build_settings['SWIFT_VERSION'] = '5.0'
+                config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'NO'
+                config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'NO'
+              end
+            end
+          end
+          EOF
+          
           echo "=== Hasil Patch Podfile ==="
-          head -n 15 Podfile
+          cat Podfile
           
       - name: Set iOS 12 all xcconfig
         script: |
