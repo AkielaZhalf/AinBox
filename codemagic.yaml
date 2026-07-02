@@ -39,7 +39,8 @@ workflows:
           cd ios/App
           pod install --repo-update
           
-      - name: Build IPA (unsigned, iOS 12, for sideload)
+      # 1. Kita kembalikan izin compile dasar Xcode agar membuat struktur penampung tanda tangan
+      - name: Build App (iOS 12, ready for Ad-Hoc signing)
         script: |
           cd ios/App
           xcodebuild \
@@ -49,24 +50,34 @@ workflows:
             -destination 'generic/platform=iOS' \
             -sdk iphoneos \
             -derivedDataPath build \
-            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_ALLOWED=YES \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="-" \
             ARCHS="arm64" \
             ONLY_ACTIVE_ARCH=YES \
             IPHONEOS_DEPLOYMENT_TARGET=12.0 \
             EXCLUDED_ARCHS="armv7 armv7s" \
             build
-            
-      - name: Package .ipa
+
+      # 2. Langkah krusial: Memaksa macOS memberikan identitas Ad-Hoc pada biner aplikasi
+      - name: Package and Ad-Hoc Sign .ipa
         script: |
           cd ios/App
           APP_PATH=$(find build -name "*.app" | head -1)
-          echo "Found .app: $APP_PATH"
+          echo "Menemukan aplikasi di: $APP_PATH"
+          
+          # Lakukan tanda tangan Ad-Hoc secara paksa menggunakan signature "-"
+          echo "=== Memulai Proses Ad-Hoc Signing ==="
+          codesign --force --deep --sign "-" "$APP_PATH"
+          
+          # Verifikasi apakah tanda tangan buatan berhasil terpasang
+          codesign -dvvv "$APP_PATH"
+          
+          # Bungkus menjadi file .ipa siap pakai
           mkdir -p Payload
           cp -r "$APP_PATH" Payload/
           zip -r AiNbox.ipa Payload
-          echo "✅ IPA iOS 12 siap!"
+          echo "✅ IPA iOS 12 dengan Tanda Tangan Ad-Hoc SIAP!"
           ls -lh AiNbox.ipa
           
     artifacts:
