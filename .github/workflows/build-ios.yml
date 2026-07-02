@@ -21,7 +21,7 @@ jobs:
       - name: Use Xcode 15
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15,2'
+          xcode-version: '15.2'
 
       - name: Install dependencies
         run: npm install
@@ -29,30 +29,26 @@ jobs:
       - name: Build web assets
         run: npm run build
 
-      - name: Install Capacitor iOS
+      - name: Add Capacitor iOS
         run: |
           npx cap add ios || true
           npx cap sync ios
 
-      - name: Set iOS 12 minimum deployment target in Podfile
+      - name: Patch Podfile - set iOS 12
         run: |
           cd ios/App
-          sed -i '' "s/platform :ios, .*/platform :ios, '12.0'/" Podfile
-          cat Podfile | head -5
+          sed -i '' "s/platform :ios, '[0-9.]*/platform :ios, '12.0'/" Podfile
+          grep -q "platform :ios" Podfile || sed -1 '' '1s/^/platform :ios,'\''12.0'\''\n/' Podfile
+          head -10 Podfile
 
-      - name: Set iOS 12 in all xcconfig files
+      - name: Set iOS 12 all xcconfig - set iOS 12
         run: |
-          find ios -name "*.xcconfig" | xargs sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = .*/IPHONEOS_DEPLOYMENT_TARGET = 12.0/g' || true
+          find ios -name "*.xcconfig" -exec sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 12.0/g' {} \; || true
 
       - name: Pod install
         run: |
           cd ios/App
           pod install --repo-update
-
-      - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
 
       - name: Build IPA (unsigned, iOS 12, for sideload)
         run: |
@@ -69,16 +65,18 @@ jobs:
             ARCHS="arm64" \
             ONLY_ACTIVE_ARCH=NO \
             IPHONEOS_DEPLOYMENT_TARGET=12.0 \
-            SWIFT_VERSION=5.0 \
             build
 
       - name: Package .ipa
         run: |
           cd ios/App
+          APP_PATH=$(find build -name "*.app" | head -1)
+          echo "Found .app: $APP_PATH"
           mkdir -p Payload
-          cp -r build/Build/Products/Release-iphoneos/App.app Payload/
+          cp -r "$APP_PATH" Payload/
           zip -r AiNbox.ipa Payload
           echo "✅ IPA iOS 12 siap!"
+          ls -lh AiNbox.ipa
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
