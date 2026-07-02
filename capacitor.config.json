@@ -1,0 +1,29 @@
+{
+  "appId": "com.donat.ainbox",
+  "appName": "AiNbox",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "ios": {
+    "scheme": "AiNbox",
+    "backgroundColor": "#ffffff",
+    "allowsLinkPreview": false,
+    "scrollEnabled": false,
+    "limitsNavigationsToAppBoundDomains": false,
+    "minVersion": "12.0"
+  },
+  "server": {
+    "allowNavigation": [
+      "generativelanguage.googleapis.com"
+    ]
+  },
+  "plugins": {
+    "StatusBar": {
+      "style": "Light",
+      "backgroundColor": "#ffffff"
+    },
+    "Keyboard": {
+      "resize": "body",
+      "resizeOnFullScreen": true
+    }
+  }
+}

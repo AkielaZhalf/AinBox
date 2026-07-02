@@ -1,0 +1,83 @@
+name: Build IPA (AiNbox)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build web assets
+        run: npm run build
+
+      - name: Install Capacitor iOS
+        run: |
+          npx cap add ios || true
+          npx cap sync ios
+
+      - name: Set iOS 12 minimum deployment target in Podfile
+        run: |
+          cd ios/App
+          sed -i '' "s/platform :ios, .*/platform :ios, '12.0'/" Podfile
+          cat Podfile | head -5
+
+      - name: Set iOS 12 in all xcconfig files
+        run: |
+          find ios -name "*.xcconfig" | xargs sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = .*/IPHONEOS_DEPLOYMENT_TARGET = 12.0/g' || true
+
+      - name: Pod install
+        run: |
+          cd ios/App
+          pod install --repo-update
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Build IPA (unsigned, iOS 12, for sideload)
+        run: |
+          cd ios/App
+          xcodebuild \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            ARCHS="arm64" \
+            ONLY_ACTIVE_ARCH=NO \
+            IPHONEOS_DEPLOYMENT_TARGET=12.0 \
+            SWIFT_VERSION=5.0 \
+            build
+
+      - name: Package .ipa
+        run: |
+          cd ios/App
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/App.app Payload/
+          zip -r AiNbox.ipa Payload
+          echo "✅ IPA iOS 12 siap!"
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AiNbox-IPA-iOS12
+          path: ios/App/AiNbox.ipa
+          retention-days: 30
