@@ -22,9 +22,11 @@ workflows:
         script: |
           npm run build
           
-      - name: Add Capacitor iOS
+      - name: Clean and Add Capacitor iOS 3
         script: |
-          npx cap add ios || true
+          # Hapus sisa folder ios lama jika ada agar tidak bentrok antar versi
+          rm -rf ios/App
+          npx cap add ios
           npx cap sync ios
           
       - name: Patch Podfile - set iOS 12
@@ -54,8 +56,6 @@ workflows:
             ONLY_ACTIVE_ARCH=YES \
             IPHONEOS_DEPLOYMENT_TARGET=12.0 \
             EXCLUDED_ARCHS="armv7 armv7s" \
-            COMPILER_INDEX_STORE_ENABLE=NO \
-            OTHER_SWIFT_FLAGS="-Xfrontend -suppress-warnings" \
             build
             
       - name: Package .ipa
