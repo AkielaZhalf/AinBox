@@ -2,15 +2,16 @@ workflows:
   ios-build:
     name: Build IPA (AiNbox iOS 12)
     max_build_duration: 60
-    instance_type: mac_mini_m2 # Server Mac M2 Gratis dari Codemagic
+    instance_type: mac_mini_m2
+    clone_depth: 1
     triggering:
       events:
         - push
       branch_patterns:
         - pattern: main
     environment:
-      node: 20 # Sama dengan setup-node@v4 node-version: 20
-      xcode: 15.4 # Sama dengan setup-xcode xcode-version: 15.2
+      node: 20
+      xcode: 16.0 # Kembali ke 16.0 karena ini satu-satunya yang didukung server
     scripts:
       - name: Install dependencies
         script: |
@@ -32,7 +33,7 @@ workflows:
           echo "=== Hasil Patch Podfile ==="
           head -n 15 Podfile
           
-      - name: Set iOS 12 all xcconfig - set iOS 12
+      - name: Set iOS 12 all xcconfig
         script: |
           find ios -name "*.xcconfig" -exec sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 12.0/g' {} \; || true
           
@@ -48,14 +49,16 @@ workflows:
             -workspace App.xcworkspace \
             -scheme App \
             -configuration Release \
+            -destination 'generic/platform=iOS' \
             -sdk iphoneos \
             -derivedDataPath build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             ARCHS="arm64" \
-            ONLY_ACTIVE_ARCH=NO \
+            ONLY_ACTIVE_ARCH=YES \
             IPHONEOS_DEPLOYMENT_TARGET=12.0 \
+            EXCLUDED_ARCHS="armv7 armv7s" \
             build
             
       - name: Package .ipa
@@ -70,5 +73,4 @@ workflows:
           ls -lh AiNbox.ipa
           
     artifacts:
-      # Menggantikan fungsi upload-artifact untuk menyimpan file ipa Anda
       - ios/App/AiNbox.ipa
